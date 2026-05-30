@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WealthFeed — Transaction Management Log</title>
+    
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/forms.css">
+    <link rel="stylesheet" href="css/tables.css">
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <!-- SIDEBAR CONTAINER -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-container">
+                    <div class="logo-icon">W</div>
+                    <span class="logo-text">WealthFeed</span>
+                </div>
+            </div>
+            
+            <nav class="sidebar-menu">
+                <a href="index.html" class="sidebar-nav-item" id="nav_dashboard">
+                    <i data-lucide="layout-dashboard"></i>
+                    <span class="sidebar-nav-text">Dashboard</span>
+                </a>
+                <a href="transactions.html" class="sidebar-nav-item active" id="nav_transactions">
+                    <i data-lucide="arrow-left-right"></i>
+                    <span class="sidebar-nav-text">Transactions</span>
+                </a>
+                <a href="investors.html" class="sidebar-nav-item" id="nav_investors">
+                    <i data-lucide="users"></i>
+                    <span class="sidebar-nav-text">Investors</span>
+                </a>
+                <a href="funds.html" class="sidebar-nav-item" id="nav_funds">
+                    <i data-lucide="landmark"></i>
+                    <span class="sidebar-nav-text">Mutual Funds</span>
+                </a>
+                <a href="analytics.html" class="sidebar-nav-item" id="nav_analytics">
+                    <i data-lucide="bar-chart-3"></i>
+                    <span class="sidebar-nav-text">Analytics</span>
+                </a>
+                <a href="add-investor.html" class="sidebar-nav-item" id="nav_add_investor">
+                    <i data-lucide="user-plus"></i>
+                    <span class="sidebar-nav-text">Add Transaction</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="#" class="sidebar-nav-item" id="nav_settings">
+                    <i data-lucide="settings"></i>
+                    <span class="sidebar-nav-text">Setting</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- MAIN WORKSPACE -->
+        <main class="main-content">
+            
+            <!-- CONTROLLER CONTROL HEADER WITH DATE RANGE FILTERS -->
+            <header class="top-nav">
+                <div class="top-nav-left">
+                    <h1>Transaction Directory</h1>
+                </div>
+                
+                <div class="top-nav-right">
+                    <span id="filter_validation" class="validation-error-alert hidden"></span>
+                    
+                    <div class="filter-input-group">
+                        <label for="from_date">From</label>
+                        <input type="date" id="from_date" name="from_date">
+                    </div>
+                    <div class="filter-input-group">
+                        <label for="to_date">To</label>
+                        <input type="date" id="to_date" name="to_date">
+                    </div>
+                    <button id="apply_filter" class="btn btn-primary" title="Apply Filter">
+                        <i data-lucide="filter"></i> Apply
+                    </button>
+                    <button id="clear_filter" class="btn btn-secondary" title="Reset Filter">
+                        <i data-lucide="rotate-ccw"></i> Reset
+                    </button>
+                </div>
+            </header>
+
+            <!-- WORKSPACE PANEL VIEW -->
+            <div class="view-wrapper fade-in">
+                
+                <!-- Table toolbar (Search) -->
+                <div class="table-toolbar">
+                    <div class="search-wrapper">
+                        <i data-lucide="search" class="search-icon"></i>
+                        <input type="text" id="search_txns" placeholder="Search by name, PAN, or mutual fund...">
+                    </div>
+                </div>
+
+                <!-- Table Content -->
+                <div class="table-responsive-container">
+                    <table class="table-custom">
+                        <thead>
+                            <tr>
+                                <th data-sort="id">Txn ID <i>&#8597;</i></th>
+                                <th data-sort="investor_name">Investor Name <i>&#8597;</i></th>
+                                <th data-sort="pan_number">PAN Number <i>&#8597;</i></th>
+                                <th data-sort="mutual_fund_name">Mutual Fund Scheme <i>&#8597;</i></th>
+                                <th data-sort="transaction_date" class="text-center">Date <i>&#8597;</i></th>
+                                <th data-sort="purchase_amount" class="text-right">Purchase Amount <i>&#8597;</i></th>
+                                <th data-sort="nav_units" class="text-right">NAV Units <i>&#8597;</i></th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbl_transactions">
+                            <!-- Dynamic rows loaded via transactions.js -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Paginated Navigations -->
+                <div class="pagination-wrapper">
+                    <div class="pagination-info" id="pagination_info">
+                        <!-- Loaded dynamically -->
+                    </div>
+                    <div class="pagination-controls" id="pagination_controls">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- ==========================================================================
+         DETAILS VIEW MODAL OVERLAY
+         ========================================================================== -->
+    <div id="details_modal" class="modal-overlay hidden">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Transaction Receipt Details</h3>
+                <button class="modal-close" title="Close Modal">&times;</button>
+            </div>
+            <div class="modal-body" id="modal_body">
+                <!-- Loaded dynamically on row click -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script type="module" src="js/app.js"></script>
+
+</body>
+</html>

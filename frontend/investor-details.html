@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WealthFeed — Investor Portfolio Profile Details</title>
+    
+    <!-- Premium Fonts & CSS Stylesheet imports -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/forms.css">
+    <link rel="stylesheet" href="css/tables.css">
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <!-- SIDEBAR CONTAINER -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-container">
+                    <div class="logo-icon">W</div>
+                    <span class="logo-text">WealthFeed</span>
+                </div>
+            </div>
+            
+            <nav class="sidebar-menu">
+                <a href="index.html" class="sidebar-nav-item" id="nav_dashboard">
+                    <i data-lucide="layout-dashboard"></i>
+                    <span class="sidebar-nav-text">Dashboard</span>
+                </a>
+                <a href="transactions.html" class="sidebar-nav-item" id="nav_transactions">
+                    <i data-lucide="arrow-left-right"></i>
+                    <span class="sidebar-nav-text">Transactions</span>
+                </a>
+                <a href="add-investor.html" class="sidebar-nav-item" id="nav_add_investor">
+                    <i data-lucide="user-plus"></i>
+                    <span class="sidebar-nav-text">Add Investor</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="#" class="sidebar-nav-item" id="nav_settings">
+                    <i data-lucide="settings"></i>
+                    <span class="sidebar-nav-text">Setting</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- ==========================================================================
+             MAIN WORKSPACE CONTAINER
+             ========================================================================== -->
+        <main class="main-content">
+            
+            <!-- TOP NAV WITH BACK ACTION BUTTON -->
+            <header class="top-nav">
+                <div class="top-nav-left">
+                    <div style="display: flex; align-items: center; gap: 16px;">
+                        <a href="index.html" class="btn btn-secondary" style="padding: 8px 12px; border-radius: 8px;" title="Back to Dashboard">
+                            <i data-lucide="arrow-left"></i>
+                        </a>
+                        <h1>Investor Portfolio Details</h1>
+                    </div>
+                </div>
+            </header>
+
+            <!-- WORKSPACE PANEL VIEW -->
+            <div class="view-wrapper fade-in">
+                
+                <!-- Investor Profile Card (Hydrated by js/investors.js) -->
+                <div id="investor_profile_card" class="profile-card">
+                    <!-- Shimmer skeletons loaded dynamically, followed by actual data -->
+                </div>
+
+                <!-- GRID: TRANSACTION LOG & ALLOCATION CHART -->
+                <div class="dashboard-row">
+                    <!-- Column 1: History Log Table -->
+                    <div class="dashboard-card">
+                        <div class="card-title-group">
+                            <h3 class="card-title">Transaction History Log</h3>
+                            <i data-lucide="history" class="text-primary"></i>
+                        </div>
+                        <div class="table-responsive-container">
+                            <table class="table-custom">
+                                <thead>
+                                    <tr>
+                                        <th>Txn ID</th>
+                                        <th>Mutual Fund Scheme</th>
+                                        <th class="text-center">Date</th>
+                                        <th class="text-right">Purchase Amount</th>
+                                        <th class="text-right">NAV Units</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbl_investor_txns">
+                                    <!-- Dynamic history table rows loaded via js/investors.js -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Column 2: Doughnut Allocation Chart -->
+                    <div class="dashboard-card">
+                        <div class="card-title-group">
+                            <h3 class="card-title">Scheme Allocation Break-up</h3>
+                            <i data-lucide="pie-chart" class="text-primary"></i>
+                        </div>
+                        <div class="chart-container" style="height: 300px;">
+                            <canvas id="investor_alloc_chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Chart.js & Lucide CDN scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Bootstrapper App Client -->
+    <script type="module" src="js/app.js"></script>
+
+</body>
+</html>

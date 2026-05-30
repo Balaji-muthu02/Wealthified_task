@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WealthFeed — Mutual Fund Analytics Dashboard</title>
+  <meta name="description" content="Premium mutual fund transaction analytics dashboard with real-time portfolio insights, fund allocation charts, and investor summaries.">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app-wrapper">
+  <!-- ═══════ SIDEBAR ═══════ -->
+  <aside class="sidebar">
+    <!-- Profile -->
+    <div class="sidebar-profile">
+      <div class="profile-avatar-wrapper">
+        <svg class="profile-avatar" viewBox="0 0 72 72" fill="none" style="border: 3px solid #eef0f6; border-radius: 50%; background: linear-gradient(135deg, #e0c3fc, #8ec5fc);">
+          <circle cx="36" cy="28" r="14" fill="#fff" opacity="0.8"/>
+          <ellipse cx="36" cy="62" rx="22" ry="16" fill="#fff" opacity="0.6"/>
+        </svg>
+        <span class="profile-online-dot"></span>
+      </div>
+      <span class="profile-name">
+        WealthFeed
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </span>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="sidebar-nav">
+      <a class="nav-item active" data-view="dashboard" id="nav-dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span>Dashboard</span>
+      </a>
+      <a class="nav-item" data-view="transactions" id="nav-transactions">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        <span>Transactions</span>
+      </a>
+      <a class="nav-item" data-view="analytics" id="nav-analytics">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+        <span>Analytics</span>
+      </a>
+      <a class="nav-item" data-view="investors" id="nav-investors">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span>Investors</span>
+      </a>
+    </nav>
+
+    <!-- Bottom -->
+    <div class="sidebar-bottom">
+      <button class="talk-advisor-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <span>Talk with advisor</span>
+      </button>
+      <img src="assets/sidebar_character.png" alt="Advisor character" class="sidebar-character">
+    </div>
+  </aside>
+
+  <!-- ═══════ MAIN CONTENT ═══════ -->
+  <main class="main-content">
+    <!-- Top Bar -->
+    <div class="top-bar">
+      <div class="greeting">
+        <h1 id="greeting-text">Hello Balaji</h1>
+        <p id="greeting-sub">Good evening</p>
+      </div>
+      <div class="search-bar">
+        <input type="text" id="global-search" placeholder="Search transaction or something else">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </div>
+    </div>
+
+    <!-- ═══════ VIEW: DASHBOARD ═══════ -->
+    <div class="view active" id="view-dashboard">
+      <div class="dashboard-grid">
+
+        <!-- Card 1: Fund Folios -->
+        <div class="card fund-folios-card animate-in">
+          <div class="card-title">Fund Folios</div>
+          <div class="folio-card-visual" id="folio-card">
+            <div class="folio-card-top">
+              <div class="folio-amc-brands">
+                <div class="amc-dot kotak">KTK</div>
+                <div class="amc-dot sbi">SBI</div>
+                <div class="amc-dot dsp">DSP</div>
+              </div>
+              <div class="folio-chip"></div>
+            </div>
+            <div class="folio-number"><span>•••• ••••</span> <span id="folio-num">16664403</span></div>
+            <div class="folio-card-bottom">
+              <div>
+                <div class="folio-label">Investor</div>
+                <div class="folio-value" id="folio-investor">M P Narayani</div>
+              </div>
+              <div>
+                <div class="folio-label">Scheme Type</div>
+                <div class="folio-value" id="folio-type">Gold FOF</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: Portfolio Summary -->
+        <div class="card portfolio-summary-card animate-in">
+          <div class="card-title">Portfolio Summary</div>
+          <div class="summary-metrics">
+            <div class="metric-block">
+              <span class="metric-label">Total Investment</span>
+              <span class="metric-value income" id="metric-investment">₹0</span>
+            </div>
+            <div class="metric-block">
+              <span class="metric-label">Total NAV Units</span>
+              <span class="metric-value expense" id="metric-units">0</span>
+            </div>
+          </div>
+          <div class="summary-note">
+            <strong>NOTE:</strong> <span id="summary-note-text">Your largest investment is in Mahindra Manulife Mid Cap Fund. Consider diversifying further.</span>
+          </div>
+          <div style="margin-top: 16px;">
+            <div class="summary-metrics">
+              <div class="metric-block">
+                <span class="metric-label">Unique Investors</span>
+                <span class="metric-value" style="color: var(--accent-primary);" id="metric-investors">0</span>
+              </div>
+              <div class="metric-block">
+                <span class="metric-label">Unique Funds</span>
+                <span class="metric-value" style="color: var(--accent-orange);" id="metric-funds">0</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3: Investment Trend (Line Chart) -->
+        <div class="card investment-trend-card animate-in">
+          <div class="card-title">
+            Investment Trend
+            <span style="font-size: 11px; color: var(--text-secondary); font-weight: 400;">*Hover for details</span>
+          </div>
+          <div class="trend-legend">
+            <div class="legend-item"><span class="legend-dot income-dot"></span> Investment</div>
+            <div class="legend-item"><span class="legend-dot outcome-dot"></span> NAV Units</div>
+          </div>
+          <div class="chart-container" id="line-chart-container">
+            <img src="assets/chart_character.png" alt="" class="chart-character">
+            <!-- SVG line chart rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Card 4: Recent Transactions -->
+        <div class="card animate-in">
+          <div class="card-title">
+            Recent Transactions
+            <span class="see-all" id="see-all-txn">All ›</span>
+          </div>
+          <div class="transactions-list" id="transactions-list">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Card 5: Fund Allocation (Doughnut Chart) -->
+        <div class="card fund-allocation-card animate-in">
+          <div class="card-title">Fund Allocation</div>
+          <div class="doughnut-wrapper">
+            <div class="doughnut-chart-container" id="doughnut-chart-container">
+              <div class="doughnut-center-text">
+                <div class="doughnut-percent" id="doughnut-percent">0%</div>
+                <div class="doughnut-sub">Top Fund</div>
+              </div>
+              <!-- SVG doughnut rendered by JS -->
+            </div>
+            <div class="doughnut-legend" id="doughnut-legend">
+              <!-- Legend items rendered by JS -->
+            </div>
+          </div>
+          <div class="allocation-total">
+            <div class="allocation-total-label">Total Portfolio</div>
+            <div class="allocation-total-value" id="allocation-total">₹0</div>
+            <div class="allocation-meta">
+              <span class="allocation-meta-text">Based on current transactions</span>
+              <span class="allocation-growth" id="allocation-growth">Active ✓</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 6: Investor Analysis (Bar Chart) -->
+        <div class="card investor-analysis-card animate-in">
+          <div class="card-title">Investor Analysis</div>
+          <div class="bar-chart-container" id="bar-chart-container">
+            <!-- SVG bar chart rendered by JS -->
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══════ VIEW: TRANSACTIONS ═══════ -->
+    <div class="view" id="view-transactions">
+      <div class="tables-view-header">
+        <h2 class="tables-view-title">Transaction Records</h2>
+      </div>
+
+      <!-- Date Filter -->
+      <div class="filter-bar">
+        <label for="filter-from">From</label>
+        <input type="date" id="filter-from">
+        <label for="filter-to">To</label>
+        <input type="date" id="filter-to">
+        <button class="btn btn-primary" id="btn-apply">Apply</button>
+        <button class="btn btn-secondary" id="btn-reset">Reset</button>
+        <span class="filter-error" id="filter-error"></span>
+      </div>
+
+      <div class="tables-grid">
+        <!-- Table 1: Investor Purchases -->
+        <section class="table-panel">
+          <div class="table-panel-header">
+            <div class="table-panel-title">
+              Investor Purchases
+              <span class="table-count-badge" id="count-inv-purchase">0</span>
+            </div>
+            <div class="table-search-input">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="search-inv-purchase" placeholder="Search...">
+            </div>
+          </div>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Investor</th>
+                  <th>Mutual Fund</th>
+                  <th class="text-right">Amount</th>
+                  <th class="text-right">Units</th>
+                  <th class="text-center">Date</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-inv-purchase"></tbody>
+            </table>
+            <div class="empty-state" id="empty-inv-purchase"><p>No matching transactions.</p></div>
+          </div>
+        </section>
+
+        <!-- Table 2: Fund Distribution -->
+        <section class="table-panel">
+          <div class="table-panel-header">
+            <div class="table-panel-title">
+              Fund Distribution
+              <span class="table-count-badge" id="count-fund-dist">0</span>
+            </div>
+            <div class="table-search-input">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="search-fund-dist" placeholder="Search...">
+            </div>
+          </div>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Mutual Fund</th>
+                  <th>Investor</th>
+                  <th class="text-right">Amount</th>
+                  <th class="text-right">Units</th>
+                  <th class="text-center">Date</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-fund-dist"></tbody>
+            </table>
+            <div class="empty-state" id="empty-fund-dist"><p>No matching funds.</p></div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- ═══════ VIEW: ANALYTICS ═══════ -->
+    <div class="view" id="view-analytics">
+      <div class="tables-view-header">
+        <h2 class="tables-view-title">Fund Analytics</h2>
+      </div>
+
+      <div class="tables-grid">
+        <!-- Table 3: Fund Summary (Aggregated) -->
+        <section class="table-panel">
+          <div class="table-panel-header">
+            <div class="table-panel-title">
+              Fund Performance
+              <span class="table-count-badge" id="count-fund-summary">0</span>
+            </div>
+            <div class="table-search-input">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="search-fund-summary" placeholder="Search fund...">
+            </div>
+          </div>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Mutual Fund</th>
+                  <th class="text-right">Total Investment</th>
+                  <th class="text-right">Total Units</th>
+                  <th class="text-right">Avg NAV</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-fund-summary"></tbody>
+            </table>
+            <div class="empty-state" id="empty-fund-summary"><p>No matching funds.</p></div>
+          </div>
+        </section>
+
+        <!-- Table 4: Investor List (Aggregated) placeholder — second panel for balance -->
+        <section class="table-panel">
+          <div class="table-panel-header">
+            <div class="table-panel-title">
+              Scheme Breakdown
+              <span class="table-count-badge" id="count-scheme-detail">0</span>
+            </div>
+            <div class="table-search-input">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="search-scheme-detail" placeholder="Search scheme...">
+            </div>
+          </div>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Investor</th>
+                  <th>Fund</th>
+                  <th class="text-right">Amount</th>
+                  <th class="text-right">Avg NAV</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-scheme-detail"></tbody>
+            </table>
+            <div class="empty-state" id="empty-scheme-detail"><p>No matching records.</p></div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- ═══════ VIEW: INVESTORS ═══════ -->
+    <div class="view" id="view-investors">
+      <div class="tables-view-header">
+        <h2 class="tables-view-title">Investor Directory</h2>
+      </div>
+
+      <div class="tables-grid" style="grid-template-columns: 1fr;">
+        <section class="table-panel" style="max-height: 700px;">
+          <div class="table-panel-header">
+            <div class="table-panel-title">
+              Investor Ledger
+              <span class="table-count-badge" id="count-investor-list">0</span>
+            </div>
+            <div class="table-search-input">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="search-investor-list" placeholder="Search investor or PAN...">
+            </div>
+          </div>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Investor Name</th>
+                  <th>PAN Number</th>
+                  <th class="text-right">Total Invested</th>
+                  <th class="text-right">Total Units</th>
+                  <th class="text-center">Transactions</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-investor-list"></tbody>
+            </table>
+            <div class="empty-state" id="empty-investor-list"><p>No matching investors.</p></div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

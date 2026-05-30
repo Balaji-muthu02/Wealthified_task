@@ -1,0 +1,460 @@
+/* WealthFeed Dashboard Specific Stylesheet - Vektora Aesthetic */
+
+/* Grid Layouts matching the reference mockup */
+.dashboard-grid-top {
+    display: grid;
+    grid-template-columns: 1.9fr 1.1fr;
+    gap: 28px;
+    margin-bottom: 28px;
+}
+
+.dashboard-grid-bottom {
+    display: grid;
+    grid-template-columns: 1.9fr 1.1fr;
+    gap: 28px;
+}
+
+.dashboard-card {
+    background: var(--bg-card);
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Card Headers */
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.card-header h2 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* Card Action Buttons */
+.card-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-export {
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-export:hover {
+    background: var(--bg-app);
+    color: var(--text-primary);
+}
+
+.btn-view-all {
+    background: #10b981; /* Emerald Green View All Button */
+    color: #ffffff;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.btn-view-all:hover {
+    background: #059669;
+    transform: translateY(-1px);
+}
+
+/* Tabs Inside Project Summary */
+.tab-container {
+    display: flex;
+    gap: 16px;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+}
+
+.tab-btn {
+    background: transparent;
+    border: none;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 4px 8px;
+    position: relative;
+    transition: var(--transition);
+}
+
+.tab-btn:hover {
+    color: var(--text-primary);
+}
+
+.tab-btn.active {
+    color: #10b981; /* Emerald accent */
+}
+
+.tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -9px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #10b981;
+}
+
+/* Tables styling */
+.table-responsive-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.table-custom {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    text-align: left;
+}
+
+.table-custom th {
+    color: var(--text-light);
+    font-weight: 500;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 11px;
+}
+
+.table-custom td {
+    padding: 14px 12px;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-primary);
+    vertical-align: middle;
+}
+
+.table-custom tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Progress bar inside table share */
+.progress-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 120px;
+}
+
+.progress-bar-bg {
+    flex: 1;
+    height: 5px;
+    background: #f1f5f9;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: #10b981; /* Default to Green */
+    border-radius: 10px;
+    width: 0%;
+    transition: width 0.8s ease-out;
+}
+
+.progress-pct {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    min-width: 24px;
+}
+
+/* Donut Chart Box */
+.chart-box {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 12px 0;
+}
+
+.chart-container-donut {
+    width: 170px;
+    height: 170px;
+    position: relative;
+}
+
+/* Statistic Summary Items */
+.statistic-summary-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    border-top: 1px solid var(--border-color);
+    padding-top: 20px;
+    margin-top: 10px;
+}
+
+.stat-summary-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.stat-icon-bg {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+}
+
+.primary-glow {
+    background: var(--primary-glow);
+    color: var(--primary);
+}
+
+.emerald-glow {
+    background: var(--emerald-bg);
+    color: var(--emerald);
+}
+
+.stat-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-label {
+    font-size: 10px;
+    color: var(--text-secondary);
+}
+
+.stat-value {
+    font-family: 'Outfit', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+/* Cashflow Chart Layout */
+.chart-container-line {
+    width: 100%;
+    height: 240px;
+    position: relative;
+}
+
+.chart-legends {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.legend-dot.green {
+    background: #10b981;
+}
+
+.legend-dot.yellow {
+    background: #f59e0b;
+}
+
+/* Recent Payment / Transaction List */
+.recent-payment-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.recent-payment-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.recent-payment-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.payment-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.payment-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--primary-glow);
+    color: var(--primary);
+    font-size: 10px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+}
+
+.payment-meta {
+    display: flex;
+    flex-direction: column;
+}
+
+.payment-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.payment-category {
+    font-size: 10px;
+    color: var(--text-secondary);
+}
+
+.payment-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+}
+
+.payment-amount {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.payment-date {
+    font-size: 9px;
+    color: var(--text-light);
+}
+
+/* Shimmer load overlay */
+.skeleton {
+    background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 4px;
+}
+
+.skeleton-text {
+    height: 12px;
+    margin: 4px 0;
+}
+
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+    .dashboard-grid-top, .dashboard-grid-bottom {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ── KPI Stats Row ── */
+.kpi-row {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.kpi-card {
+    background: var(--bg-card);
+    border-radius: 16px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    transition: var(--transition);
+}
+
+.kpi-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.09);
+}
+
+.kpi-icon-box {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.kpi-icon-box svg {
+    width: 18px;
+    height: 18px;
+}
+
+.kpi-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.kpi-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    white-space: nowrap;
+}
+
+.kpi-value {
+    font-family: 'Outfit', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@media (max-width: 1400px) {
+    .kpi-row { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 768px) {
+    .kpi-row { grid-template-columns: repeat(2, 1fr); }
+}

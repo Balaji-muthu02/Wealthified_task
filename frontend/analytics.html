@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="WealthFeed – Analytics Reports. View all 4 required mutual fund investment reports.">
+    <title>WealthFeed — Analytics Reports</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/forms.css">
+    <link rel="stylesheet" href="css/tables.css">
+    <style>
+        .report-section {
+            background: var(--bg-card);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+        .report-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 24px;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.15s;
+        }
+        .report-header:hover { background: var(--bg-app); }
+        .report-header h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0;
+        }
+        .report-header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .report-badge {
+            background: var(--primary-glow);
+            color: var(--primary);
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 20px;
+        }
+        .collapse-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            transition: transform 0.25s;
+        }
+        .collapse-icon.open { transform: rotate(180deg); }
+        .report-body {
+            padding: 0 24px 20px;
+            display: none;
+        }
+        .report-body.open { display: block; }
+        .analytics-kpi-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .analytics-kpi-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--primary);
+        }
+        .analytics-kpi-card.emerald { border-color: #10b981; }
+        .analytics-kpi-card.gold { border-color: #f59e0b; }
+        .analytics-kpi-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+        .analytics-kpi-value {
+            font-family: 'Outfit', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+<body>
+<div class="app-container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-container">
+                <div class="logo-icon">W</div>
+                <span class="logo-text">WealthFeed</span>
+            </div>
+        </div>
+        <nav class="sidebar-menu">
+            <a href="index.html" class="sidebar-nav-item" id="nav_dashboard">
+                <i data-lucide="layout-dashboard"></i>
+                <span class="sidebar-nav-text">Dashboard</span>
+            </a>
+            <a href="transactions.html" class="sidebar-nav-item" id="nav_transactions">
+                <i data-lucide="arrow-left-right"></i>
+                <span class="sidebar-nav-text">Transactions</span>
+            </a>
+            <a href="investors.html" class="sidebar-nav-item" id="nav_investors">
+                <i data-lucide="users"></i>
+                <span class="sidebar-nav-text">Investors</span>
+            </a>
+            <a href="funds.html" class="sidebar-nav-item" id="nav_funds">
+                <i data-lucide="landmark"></i>
+                <span class="sidebar-nav-text">Mutual Funds</span>
+            </a>
+            <a href="analytics.html" class="sidebar-nav-item active" id="nav_analytics">
+                <i data-lucide="bar-chart-3"></i>
+                <span class="sidebar-nav-text">Analytics</span>
+            </a>
+            <a href="add-investor.html" class="sidebar-nav-item" id="nav_add_investor">
+                <i data-lucide="user-plus"></i>
+                <span class="sidebar-nav-text">Add Transaction</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <a href="#" class="sidebar-nav-item" id="nav_settings">
+                <i data-lucide="settings"></i>
+                <span class="sidebar-nav-text">Setting</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <header class="top-nav">
+            <div class="top-nav-left">
+                <h1>Analytics Reports</h1>
+            </div>
+            <div class="top-nav-right">
+                <span id="filter_validation" class="validation-error-alert hidden"></span>
+                <div class="filter-input-group">
+                    <label for="from_date">From</label>
+                    <input type="date" id="from_date" name="from_date">
+                </div>
+                <div class="filter-input-group">
+                    <label for="to_date">To</label>
+                    <input type="date" id="to_date" name="to_date">
+                </div>
+                <button id="apply_filter" class="btn btn-primary">
+                    <i data-lucide="filter"></i> Apply
+                </button>
+                <button id="clear_filter" class="btn btn-secondary">
+                    <i data-lucide="rotate-ccw"></i> Reset
+                </button>
+                <button id="btn_export_analytics" class="btn btn-secondary">
+                    <i data-lucide="download"></i> Export All CSV
+                </button>
+            </div>
+        </header>
+
+        <div class="view-wrapper fade-in">
+
+            <!-- Summary KPIs -->
+            <div class="analytics-kpi-row">
+                <div class="analytics-kpi-card">
+                    <div class="analytics-kpi-label">Total Investor-Fund Pairs</div>
+                    <div class="analytics-kpi-value" id="akpi_investor_pairs">—</div>
+                </div>
+                <div class="analytics-kpi-card emerald">
+                    <div class="analytics-kpi-label">Total Fund-Investor Pairs</div>
+                    <div class="analytics-kpi-value" id="akpi_fund_pairs">—</div>
+                </div>
+                <div class="analytics-kpi-card gold">
+                    <div class="analytics-kpi-label">Unique Mutual Funds</div>
+                    <div class="analytics-kpi-value" id="akpi_unique_funds">—</div>
+                </div>
+            </div>
+
+            <!-- Report 1 -->
+            <div class="report-section" id="report1">
+                <div class="report-header" data-target="report1_body">
+                    <h3>Report 1 — Investor-wise Purchase Summary per Mutual Fund</h3>
+                    <div class="report-header-right">
+                        <span class="report-badge" id="badge_r1">0 rows</span>
+                        <span class="collapse-icon open"><i data-lucide="chevron-down"></i></span>
+                    </div>
+                </div>
+                <div class="report-body open" id="report1_body">
+                    <div class="table-responsive-container" style="margin-top:16px;">
+                        <table class="table-custom">
+                            <thead>
+                                <tr>
+                                    <th>Investor Name</th>
+                                    <th>Mutual Fund</th>
+                                    <th class="text-right">Total Purchase (₹)</th>
+                                    <th class="text-right">Total NAV Units</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbl_r1">
+                                <tr><td colspan="4" style="text-align:center;padding:32px;color:var(--text-secondary);">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Report 2 -->
+            <div class="report-section" id="report2">
+                <div class="report-header" data-target="report2_body">
+                    <h3>Report 2 — Mutual Fund-wise Summary per Investor</h3>
+                    <div class="report-header-right">
+                        <span class="report-badge" id="badge_r2">0 rows</span>
+                        <span class="collapse-icon"><i data-lucide="chevron-down"></i></span>
+                    </div>
+                </div>
+                <div class="report-body" id="report2_body">
+                    <div class="table-responsive-container" style="margin-top:16px;">
+                        <table class="table-custom">
+                            <thead>
+                                <tr>
+                                    <th>Mutual Fund</th>
+                                    <th>Investor Name</th>
+                                    <th class="text-right">Total Invested (₹)</th>
+                                    <th class="text-right">Total NAV Units</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbl_r2">
+                                <tr><td colspan="4" style="text-align:center;padding:32px;color:var(--text-secondary);">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Report 3 -->
+            <div class="report-section" id="report3">
+                <div class="report-header" data-target="report3_body">
+                    <h3>Report 3 — Investor List with Purchase Details</h3>
+                    <div class="report-header-right">
+                        <span class="report-badge" id="badge_r3">0 rows</span>
+                        <span class="collapse-icon"><i data-lucide="chevron-down"></i></span>
+                    </div>
+                </div>
+                <div class="report-body" id="report3_body">
+                    <div class="table-responsive-container" style="margin-top:16px;">
+                        <table class="table-custom">
+                            <thead>
+                                <tr>
+                                    <th>Investor Name</th>
+                                    <th>PAN Number</th>
+                                    <th class="text-right">Total Invested (₹)</th>
+                                    <th class="text-right">Total NAV Units</th>
+                                    <th class="text-center">Funds</th>
+                                    <th class="text-center">Last Transaction</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbl_r3">
+                                <tr><td colspan="6" style="text-align:center;padding:32px;color:var(--text-secondary);">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Report 4 -->
+            <div class="report-section" id="report4">
+                <div class="report-header" data-target="report4_body">
+                    <h3>Report 4 — Mutual Fund Summary</h3>
+                    <div class="report-header-right">
+                        <span class="report-badge" id="badge_r4">0 rows</span>
+                        <span class="collapse-icon"><i data-lucide="chevron-down"></i></span>
+                    </div>
+                </div>
+                <div class="report-body" id="report4_body">
+                    <div class="table-responsive-container" style="margin-top:16px;">
+                        <table class="table-custom">
+                            <thead>
+                                <tr>
+                                    <th>Fund Name</th>
+                                    <th class="text-right">Total Invested (₹)</th>
+                                    <th class="text-right">Total NAV Units</th>
+                                    <th class="text-right">Avg NAV Price (₹)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbl_r4">
+                                <tr><td colspan="4" style="text-align:center;padding:32px;color:var(--text-secondary);">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
