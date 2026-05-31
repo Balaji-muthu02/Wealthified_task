@@ -346,6 +346,24 @@ code {
 }
 
 /* ==========================================================================
+   INVESTOR DETAILS PAGE — DASHBOARD ROW LAYOUT
+   ========================================================================== */
+
+/* Two-column row: Transaction History Log | Scheme Allocation Break-up */
+.dashboard-row {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+@media (max-width: 1024px) {
+    .dashboard-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ==========================================================================
    INVESTOR PROFILE DETAIL STYLES
    ========================================================================== */
 

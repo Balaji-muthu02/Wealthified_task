@@ -458,3 +458,43 @@
 @media (max-width: 768px) {
     .kpi-row { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* ── Dashboard Charts Row ── */
+.dashboard-charts-row {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1.6fr;
+    gap: 24px;
+    margin-bottom: 28px;
+}
+
+/* Canvas wrapper for bar chart and line chart */
+.chart-canvas-wrapper {
+    position: relative;
+    width: 100%;
+    height: 280px;
+}
+
+/* Canvas wrapper for doughnut (smaller square ratio) */
+.chart-canvas-wrapper--donut {
+    height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* The chart card itself is already .dashboard-card */
+.chart-card {
+    min-width: 0;
+}
+
+@media (max-width: 1200px) {
+    .dashboard-charts-row {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-charts-row {
+        grid-template-columns: 1fr;
+    }
+}

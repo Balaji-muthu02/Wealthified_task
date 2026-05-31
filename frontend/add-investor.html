@@ -96,7 +96,16 @@
                             <!-- Scheme field -->
                             <div class="form-group">
                                 <label for="mutual_fund_name">Mutual Fund Scheme</label>
-                                <input type="text" id="mutual_fund_name" class="form-control" placeholder="E.g. Axis Small Cap Fund">
+                                <select id="mutual_fund_name" class="form-control">
+                                    <option value="" disabled selected>-- Select Mutual Fund Scheme --</option>
+                                    <option value="Kotak Gold Fund">Kotak Gold Fund</option>
+                                    <option value="SBI Small Cap Fund Regular Growth">SBI Small Cap Fund Regular Growth</option>
+                                    <option value="DSP Nifty 50 Equal Weight Index Fund - Reg - Growth">DSP Nifty 50 Equal Weight Index Fund - Reg - Growth</option>
+                                    <option value="SBI Magnum Ultra Short Duration Fund Regular Growth">SBI Magnum Ultra Short Duration Fund Regular Growth</option>
+                                    <option value="Kotak Gold Fund - Growth (Regular Plan)">Kotak Gold Fund - Growth (Regular Plan)</option>
+                                    <option value="Mahindra Manulife Mid Cap Fund - Regular - Growth">Mahindra Manulife Mid Cap Fund - Regular - Growth</option>
+                                    <option value="ICICI Prudential Ultra Short Term Fund - Growth">ICICI Prudential Ultra Short Term Fund - Growth</option>
+                                </select>
                                 <span id="err_mutual_fund_name" class="form-error hidden"></span>
                             </div>
 

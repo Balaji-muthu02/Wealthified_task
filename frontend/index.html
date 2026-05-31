@@ -152,6 +152,41 @@
                     </div>
                 </div>
                 
+                <!-- CHARTS ROW: 3 Dashboard Charts -->
+                <div class="dashboard-charts-row">
+
+                    <!-- Chart 1: Investments by Mutual Fund (Bar Chart) -->
+                    <div class="dashboard-card chart-card">
+                        <div class="card-header">
+                            <h2>Investments by Mutual Fund</h2>
+                        </div>
+                        <div class="chart-canvas-wrapper">
+                            <canvas id="chart_bar_investments"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Chart 2: Fund Distribution (Doughnut Chart) -->
+                    <div class="dashboard-card chart-card">
+                        <div class="card-header">
+                            <h2>Fund Distribution</h2>
+                        </div>
+                        <div class="chart-canvas-wrapper chart-canvas-wrapper--donut">
+                            <canvas id="chart_doughnut_distribution"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Chart 3: Investment Trend (Line Chart) -->
+                    <div class="dashboard-card chart-card">
+                        <div class="card-header">
+                            <h2>Investment Trend</h2>
+                        </div>
+                        <div class="chart-canvas-wrapper">
+                            <canvas id="chart_line_trend"></canvas>
+                        </div>
+                    </div>
+
+                </div>
+
                 <!-- TOP GRID ROW: MUTUAL FUND PORTFOLIOS -->
                 <div class="dashboard-grid-top" style="grid-template-columns: 1fr; gap: 24px;">
                     
@@ -218,6 +253,9 @@
 
     <!-- Lucide CDN script -->
     <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Chart.js CDN - Required for dashboard charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
     
     <!-- Bootstrapper App Client -->
     <script type="module" src="js/app.js"></script>

@@ -1,181 +1,134 @@
 # Wealthified - Mutual Fund Transaction Analytics Dashboard
 
-A beginner-friendly, high-performance, single-page full-stack dashboard designed to aggregate and summarize mutual fund transactions. Built with a **Python (FastAPI)** backend, a **PostgreSQL** database, and a **Vanilla HTML/CSS/JS** frontend featuring a modern glassmorphic theme and interactive visualizations.
+Wealthified is a modern, high-performance, full-stack dashboard designed to aggregate, track, and summarize mutual fund transactions. Built with a **Python (FastAPI)** backend, a **PostgreSQL** database, and a responsive **Vanilla HTML/CSS/JS** frontend featuring interactive visualizations, custom filters, and data export tools.
 
 ---
 
-## Features
+## 🛠️ Dependencies & Tools Required
 
-1. **Investor-wise Purchase Summary per Mutual Fund**: View aggregate investments and NAV units grouped by investor and fund.
-2. **Mutual Fund-wise Summary per Investor**: Drill down into fund portfolios showing individual investor allocations.
-3. **Investor Directory**: List of all active investors, their PAN details, and total capital committed.
-4. **Mutual Fund Performance Analytics**: Aggregated total investments, NAV units, and weighted average NAV calculation.
-5. **Interactive Date Range Filter**: Dynamically filter all metrics, summaries, tables, and charts across a custom time period.
-6. **Live Data Visualization**: Allocation doughnut and contribution bar charts powered by Chart.js.
-7. **Fast Client-side Search**: Instantly filter table contents without sending redundant network requests.
+To run this project locally, you need the following installed on your system:
 
----
+1. **Python 3.8+**
+2. **PostgreSQL Database Server**
+3. **Node.js** / **npm** (Optional, for running lightweight servers; Python can be used instead)
+4. **Modern Web Browser** (Chrome, Edge, Firefox, Safari)
 
-## Directory Structure
-
-```text
-Wealthified/
-├── backend/
-│   ├── app/
-│   │   ├── __init__.py
-│   │   ├── main.py          # FastAPI application startup and endpoints
-│   │   ├── database.py      # SQLAlchemy engine configuration
-│   │   ├── models.py        # SQLAlchemy model representing the transaction schema
-│   │   ├── schemas.py       # Pydantic validation schemas
-│   │   └── crud.py          # Aggregate DB queries & filter logic
-│   ├── requirements.txt     # Python backend dependencies
-│   ├── .env                 # Environment configuration (created on setup)
-│   └── .env.example         # Template environment file
-├── frontend/
-│   ├── index.html           # Main dashboard layout
-│   ├── style.css            # Responsive layout and glassmorphism styling
-│   └── app.js               # Tab switches, API fetching, and chart generation
-├── dataset/
-│   ├── transactions.csv     # Sample CSV dataset containing transactions
-│   └── import_csv.py        # Python script to load CSV data into PostgreSQL
-└── README.md                # This setup and documentation file
-```
+### Required Python Packages
+These are listed in `backend/requirements.txt`:
+* `fastapi` & `uvicorn` (Backend API Server)
+* `sqlalchemy` (SQL Toolkit and ORM)
+* `psycopg2-binary` (PostgreSQL Database Driver)
+* `pydantic` & `pydantic-settings` (Data Validation and Settings management)
 
 ---
 
-## Setup & Running Instructions
+## 🚀 Setup Instructions
 
-Follow these step-by-step instructions to get the application up and running locally.
-
-### 1. Database Setup
-1. Ensure **PostgreSQL** is installed and running on your system.
-2. Open your terminal or `psql` shell and create a new database:
+### 1. Database Configuration
+1. Start your **PostgreSQL** server.
+2. Log in to your PostgreSQL terminal (`psql` or pgAdmin) and create a new database:
    ```sql
    CREATE DATABASE wealthfeed_db;
    ```
-3. Copy `backend/.env.example` to `backend/.env` (if not already done) and adjust the credentials matching your PostgreSQL username and password:
+3. Copy `backend/.env.example` to `backend/.env` in the project root:
    ```env
    DB_HOST=localhost
    DB_PORT=5432
    DB_NAME=wealthfeed_db
    DB_USER=postgres
-   DB_PASSWORD=YOUR_PASSWORD_HERE
+   DB_PASSWORD=YOUR_POSTGRES_PASSWORD
    ```
+   *Replace `YOUR_POSTGRES_PASSWORD` with your actual local PostgreSQL password.*
 
-### 2. Install Python Dependencies
-Create a virtual environment (optional but recommended) and install the backend packages:
+### 2. Python Environment Setup
+Activate your virtual environment and install the required modules:
 ```bash
-# Create virtual environment
+# 1. Create a Python virtual environment
 python -m venv venv
 
-# Activate virtual environment
-# On Windows:
-venv\Scripts\activate
+# 2. Activate the virtual environment
+# On Windows (PowerShell):
+venv\Scripts\Activate.ps1
+# On Windows (CMD):
+venv\Scripts\activate.bat
 # On macOS/Linux:
 source venv/bin/activate
 
-# Install required dependencies
+# 3. Install packages
 pip install -r backend/requirements.txt
 ```
 
-### 3. Import CSV Transactions into PostgreSQL
-Execute the CSV importing script to automatically construct the `transactions` table structure and seed it with mock transaction records:
+### 3. Database Migration & CSV Seed
+To set up database tables and import transaction data from the CSV file automatically:
 ```bash
 python dataset/import_csv.py
 ```
-*Note: This script will truncate any existing table data before loading to prevent duplicate records on repeated runs.*
+*Note: This script initializes the database tables and populates them with sample records from `dataset/transactions.csv`.*
 
-### 4. Start the FastAPI Backend
-Start the uvicorn development server:
+---
+
+## 🏃 How to Run the Application
+
+To run the application, you need to launch both the **Backend API Server** and the **Frontend client**.
+
+### 1. Launch Backend API
+With your virtual environment active, start the FastAPI server:
 ```bash
 uvicorn backend.app.main:app --reload
 ```
-The backend server will spin up at **`http://localhost:8000`**. You can verify that it is working by opening your browser and visiting:
-* Root endpoint: `http://localhost:8000/`
-* Swagger API Documentation: `http://localhost:8000/docs`
+* The API server will start at **`http://localhost:8000`**
+* View the interactive API documentation (Swagger UI) at **`http://localhost:8000/docs`**
 
-### 5. Launch the Frontend Dashboard
-Since the frontend consists of static files (`index.html`, `style.css`, `app.js`), you can launch it in a couple of ways:
-* **Double-click** the `frontend/index.html` file to open it directly in any modern browser.
-* Or serve it using a lightweight server, such as Python's built-in HTTP server:
+### 2. Launch Frontend Client
+Since the frontend consists of static files, you can:
+* **Double-click** on `frontend/index.html` to open it directly in a browser.
+* Or, run a local static file server (recommended):
   ```bash
-  # Run from the frontend directory
+  # Go to frontend folder
   cd frontend
+  # Start Python's built-in server
   python -m http.server 3000
   ```
-  Then access the dashboard via `http://localhost:3000`.
+  Open **`http://localhost:3000`** in your web browser.
 
 ---
 
-## REST API Documentation
+## 📊 How to See the Output Details
 
-All analytical summaries support two optional query filters:
-* `from_date` (format: `YYYY-MM-DD`)
-* `to_date` (format: `YYYY-MM-DD`)
+Once the application is running, navigate through the dashboard sidebar to explore details:
 
-### 1. Investor-wise Summary
-* **Endpoint**: `GET /api/investor-summary`
-* **Purpose**: Aggregate investment amount and units grouped by investor and mutual fund scheme.
-* **Sample Response**:
-  ```json
-  [
-    {
-      "investor_name": "Balaji Esakkimuthu",
-      "mutual_fund_name": "HDFC Mid-Cap Opportunities Fund",
-      "total_purchase_amount": 85000.0,
-      "total_nav_units": 756.8364
-    }
-  ]
-  ```
-
-### 2. Mutual Fund-wise Summary
-* **Endpoint**: `GET /api/fund-summary-by-investor`
-* **Purpose**: Mutual fund holdings details broken down by investor.
-* **Sample Response**:
-  ```json
-  [
-    {
-      "mutual_fund_name": "HDFC Mid-Cap Opportunities Fund",
-      "investor_name": "Balaji Esakkimuthu",
-      "total_amount_invested": 85000.0,
-      "total_nav_units": 756.8364
-    }
-  ]
-  ```
-
-### 3. Investor List
-* **Endpoint**: `GET /api/investors`
-* **Purpose**: List of all unique investors, PAN details, and total amount invested.
-* **Sample Response**:
-  ```json
-  [
-    {
-      "investor_name": "Balaji Esakkimuthu",
-      "pan_number": "ABCDE1234F",
-      "total_amount_invested": 155000.0
-    }
-  ]
-  ```
-
-### 4. Mutual Fund Summary Analytics
-* **Endpoint**: `GET /api/mutual-fund-summary`
-* **Purpose**: Summary details for all mutual fund schemes, including weighted average NAV.
-* **Calculation**: `Average NAV = Total Investment Amount / Total Units Purchased`.
-* **Sample Response**:
-  ```json
-  [
-    {
-      "mutual_fund_name": "HDFC Mid-Cap Opportunities Fund",
-      "total_amount_invested": 190000.0,
-      "total_nav_units": 1658.2928,
-      "average_nav": 114.5756
-    }
-  ]
-  ```
+1. **Dashboard**: View high-level metrics (Total Investment, NAV Units, Investors count) and interactive charts (Investments by Mutual Fund, Fund Distribution percentage, and Investment Trends). Apply date filters to view custom date ranges.
+2. **Transactions**: Browse list of all raw transactions, search by name, sort columns, paginate results, and download reports as CSV.
+3. **Investors**: Access the investor list directory, view aggregate assets, and click on an investor to open their **Portfolio Details** containing their personal transaction log history and scheme allocation chart.
+4. **Mutual Funds**: View performance stats of all individual mutual fund schemes and their average unit acquisition price.
+5. **Analytics**: Drill down into multi-dimensional aggregate reports (Investor-wise schemes purchase summary, Mutual fund-wise investor details).
+6. **Add Transaction**: Submit new purchases easily using a secure form with a built-in static scheme dropdown.
 
 ---
 
-## Edge Case Handling
-* **Division-by-Zero Protection**: If a fund has `0` NAV units during a filtered period, the average NAV is safely computed as `0.00` rather than causing a backend crash.
-* **Empty State Handling**: If a filter results in no transactions, tables display an intuitive "No Records Found" layout and charts clear properly.
-* **Invalid Date Range**: If the `from_date` is configured later than the `to_date`, the API returns a `400 Bad Request` validation error, which is caught and displayed by the frontend alert system.
+## 🖼️ Output Screens
+
+### 1. Main Analytics Dashboard
+Shows the KPI summary cards, bar charts, doughnut fund distributions, and investment trends.
+![Main Analytics Dashboard](assets/dashboard.png)
+
+### 2. Transaction Directory
+Complete log of all mutual fund transaction records with pagination, searching, sorting, and export capabilities.
+![Transaction Directory](assets/transactions.png)
+
+### 3. Investor Directory
+Directory listing of active investors with search filters, fund holdings statistics, and individual CSV download.
+![Investor Directory](assets/investors.png)
+
+### 4. Mutual Fund Directory
+Breakdown of active mutual funds, total invested amounts, total units, and average nav values.
+![Mutual Fund Directory](assets/funds.png)
+
+### 5. Multi-dimensional Analytics Reports
+Collapsible multi-level reports for compliance, audits, and overall scheme allocations.
+![Analytics Reports](assets/analytics.png)
+
+### 6. Record Transaction Form
+Form to insert a new mutual fund purchase entry with a dropdown for scheme selection and automatically calculated NAV prices.
+![Record Transaction](assets/add_transaction.png)
+

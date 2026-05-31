@@ -17,6 +17,11 @@ let cachedInvestors = [];
 let activeTabFilter = "all";
 let activeSearchQuery = "";
 
+// Chart.js instance references — stored so we can destroy before re-rendering
+let chartBarInstance = null;
+let chartDoughnutInstance = null;
+let chartLineInstance = null;
+
 // ==========================================================================
 // 1. LAYOUT & SIDEBAR NAVIGATION SETUP
 // ==========================================================================
@@ -374,6 +379,11 @@ export async function refreshDashboardData(fromDateVal = "", toDateVal = "") {
         // 4. Render recent activity transaction rows
         renderRecentTransactions();
 
+        // 5. Render the 3 dashboard charts using already-fetched cache data
+        renderBarChart();
+        renderDoughnutChart();
+        renderLineChart();
+
     } catch (error) {
         console.error("Dashboard load error:", error);
         utils.showToast(error.message || "Failed to load dashboard data.", "error");
@@ -382,7 +392,289 @@ export async function refreshDashboardData(fromDateVal = "", toDateVal = "") {
 }
 
 // ==========================================================================
-// 5. EVENT BINDINGS & BOOTSTRAP
+// 5. DASHBOARD CHARTS (Bar, Doughnut, Line)
+// ==========================================================================
+
+// Shared color palette — each mutual fund always gets the same color
+// across both Bar Chart and Doughnut Chart.
+const FUND_COLORS = [
+    "#4a3aff", "#10b981", "#f59e0b", "#ef4444",
+    "#8b5cf6", "#06b6d4", "#f97316", "#14b8a6",
+    "#ec4899", "#64748b"
+];
+
+// This object maps each fund name to a fixed color index.
+// It is built once when charts first render and reused on every refresh.
+const fundColorMap = {};
+
+// Helper: returns the consistent color for a given fund name.
+// If a fund is seen for the first time, it gets the next available color.
+function getColorForFund(fundName) {
+    if (!fundColorMap[fundName]) {
+        const usedCount = Object.keys(fundColorMap).length;
+        fundColorMap[fundName] = FUND_COLORS[usedCount % FUND_COLORS.length];
+    }
+    return fundColorMap[fundName];
+}
+
+// Chart 1: Bar Chart — Total Investment per Mutual Fund
+// Uses cachedFunds which is already fetched in refreshDashboardData
+function renderBarChart() {
+    const canvasElement = document.getElementById("chart_bar_investments");
+    if (!canvasElement) return;
+
+    // Destroy the old chart instance before drawing a new one
+    if (chartBarInstance) {
+        chartBarInstance.destroy();
+        chartBarInstance = null;
+    }
+
+    // Handle empty data safely
+    if (cachedFunds.length === 0) return;
+
+    // Get fund names and their total investment amounts
+    // Guard against undefined/null names so no label shows as "undefined"
+    const fundLabels = cachedFunds.map(fund => fund.mutual_fund_name || "Unknown");
+    const fundAmounts = cachedFunds.map(fund => parseFloat(fund.total_amount_invested) || 0);
+
+    // Get consistent color for each fund using the shared color map
+    const barColors = fundLabels.map(name => getColorForFund(name));
+
+    // Draw the bar chart using Chart.js
+    chartBarInstance = new Chart(canvasElement, {
+        type: "bar",
+        data: {
+            labels: fundLabels,
+            datasets: [{
+                label: "Total Investment (₹)",
+                data: fundAmounts,
+                backgroundColor: barColors.map(c => c + "bf"), // bf = ~75% opacity in hex
+                borderColor: barColors,
+                borderWidth: 1.5,
+                borderRadius: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        // Show rupee formatted values in tooltip
+                        label: function(context) {
+                            const value = context.parsed.y || 0;
+                            return " ₹" + value.toLocaleString("en-IN", { maximumFractionDigits: 2 });
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        font: { size: 9 },
+                        maxRotation: 30,
+                        // Shorten long fund names on x-axis labels
+                        callback: function(value, index) {
+                            const label = fundLabels[index] || "";
+                            return label.length > 14 ? label.substring(0, 14) + "…" : label;
+                        }
+                    },
+                    grid: { display: false }
+                },
+                y: {
+                    ticks: {
+                        font: { size: 9 },
+                        callback: function(value) {
+                            // Show values in lakhs/crores shorthand on y-axis
+                            if (value >= 10000000) return "₹" + (value / 10000000).toFixed(1) + "Cr";
+                            if (value >= 100000) return "₹" + (value / 100000).toFixed(1) + "L";
+                            if (value >= 1000) return "₹" + (value / 1000).toFixed(1) + "K";
+                            return "₹" + value;
+                        }
+                    },
+                    grid: { color: "rgba(0,0,0,0.05)" }
+                }
+            }
+        }
+    });
+}
+
+// Chart 2: Doughnut Chart — Fund Distribution by percentage
+// Uses same cachedFunds data (no extra API call needed)
+function renderDoughnutChart() {
+    const canvasElement = document.getElementById("chart_doughnut_distribution");
+    if (!canvasElement) return;
+
+    // Destroy the old chart instance before drawing a new one
+    if (chartDoughnutInstance) {
+        chartDoughnutInstance.destroy();
+        chartDoughnutInstance = null;
+    }
+
+    // Handle empty data safely
+    if (cachedFunds.length === 0) return;
+
+    // Get fund names and their amounts for the doughnut slices
+    // Guard against undefined/null names so no label shows as "undefined"
+    const fundLabels = cachedFunds.map(fund => fund.mutual_fund_name || "Unknown");
+    const fundAmounts = cachedFunds.map(fund => parseFloat(fund.total_amount_invested) || 0);
+
+    // Get consistent colors using the same shared color map as the Bar Chart
+    const sliceColors = fundLabels.map(name => getColorForFund(name));
+
+    // Draw the doughnut chart using Chart.js
+    chartDoughnutInstance = new Chart(canvasElement, {
+        type: "doughnut",
+        data: {
+            labels: fundLabels,
+            datasets: [{
+                data: fundAmounts,
+                backgroundColor: sliceColors.slice(0, fundLabels.length),
+                borderWidth: 2,
+                borderColor: "#ffffff",
+                hoverOffset: 8
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: "62%",
+            plugins: {
+                legend: {
+                    position: "bottom",
+                    labels: {
+                        font: { size: 9 },
+                        boxWidth: 10,
+                        padding: 8,
+                        // Shorten long fund names in legend
+                        // Read directly from chart.data.labels (which we control and guard with || "Unknown")
+                        // Avoids "undefined" that can occur when calling Chart.defaults.generateLabels too early
+                        generateLabels: function(chart) {
+                            const labels = chart.data.labels || [];
+                            const colors = chart.data.datasets[0]?.backgroundColor || [];
+                            return labels.map(function(label, index) {
+                                const displayText = (label && label.length > 16) ? label.substring(0, 16) + "…" : (label || "Unknown");
+                                return {
+                                    text: displayText,
+                                    fillStyle: colors[index] || "#64748b",
+                                    strokeStyle: "#ffffff",
+                                    lineWidth: 2,
+                                    hidden: false,
+                                    index: index
+                                };
+                            });
+                        }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const value = context.parsed || 0;
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const pct = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                            return " ₹" + value.toLocaleString("en-IN", { maximumFractionDigits: 0 }) + " (" + pct + "%)";
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+// Chart 3: Line Chart — Investment Trend over time
+// Uses cachedTransactions — groups purchase amounts by transaction date
+function renderLineChart() {
+    const canvasElement = document.getElementById("chart_line_trend");
+    if (!canvasElement) return;
+
+    // Destroy the old chart instance before drawing a new one
+    if (chartLineInstance) {
+        chartLineInstance.destroy();
+        chartLineInstance = null;
+    }
+
+    // Handle empty data safely
+    if (cachedTransactions.length === 0) return;
+
+    // Step 1: Group all transaction amounts by their date
+    const dailyTotals = {};
+    cachedTransactions.forEach(transaction => {
+        const dateKey = transaction.transaction_date ? transaction.transaction_date.substring(0, 10) : null;
+        if (!dateKey) return;
+        const amount = parseFloat(transaction.purchase_amount) || 0;
+        if (dailyTotals[dateKey]) {
+            dailyTotals[dateKey] += amount;
+        } else {
+            dailyTotals[dateKey] = amount;
+        }
+    });
+
+    // Step 2: Sort dates in ascending order for the line chart
+    const sortedDates = Object.keys(dailyTotals).sort();
+    const sortedAmounts = sortedDates.map(date => dailyTotals[date]);
+
+    // Step 3: Format date labels for display (e.g. "15 Jan")
+    const dateLabels = sortedDates.map(dateStr => {
+        const dateObj = new Date(dateStr);
+        return dateObj.toLocaleDateString("en-IN", { day: "2-digit", month: "short" });
+    });
+
+    // Draw the line chart using Chart.js
+    chartLineInstance = new Chart(canvasElement, {
+        type: "line",
+        data: {
+            labels: dateLabels,
+            datasets: [{
+                label: "Daily Investment (₹)",
+                data: sortedAmounts,
+                borderColor: "#10b981",
+                backgroundColor: "rgba(16, 185, 129, 0.10)",
+                borderWidth: 2,
+                pointRadius: 3,
+                pointBackgroundColor: "#10b981",
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const value = context.parsed.y || 0;
+                            return " ₹" + value.toLocaleString("en-IN", { maximumFractionDigits: 2 });
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    ticks: { font: { size: 9 }, maxRotation: 30 },
+                    grid: { display: false }
+                },
+                y: {
+                    ticks: {
+                        font: { size: 9 },
+                        callback: function(value) {
+                            if (value >= 10000000) return "₹" + (value / 10000000).toFixed(1) + "Cr";
+                            if (value >= 100000) return "₹" + (value / 100000).toFixed(1) + "L";
+                            if (value >= 1000) return "₹" + (value / 1000).toFixed(1) + "K";
+                            return "₹" + value;
+                        }
+                    },
+                    grid: { color: "rgba(0,0,0,0.05)" }
+                }
+            }
+        }
+    });
+}
+
+// ==========================================================================
+// 6. EVENT BINDINGS & BOOTSTRAP
 // ==========================================================================
 
 // Bind DOM event listeners for search filters, tabs clicking and export buttons
