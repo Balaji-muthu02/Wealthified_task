@@ -1,4 +1,4 @@
-# Wealthified - Mutual Fund Transaction Analytics Dashboard
+# Wealthify - Mutual Fund Transaction Analytics Dashboard
 
 Wealthified is a modern, high-performance, full-stack dashboard designed to aggregate, track, and summarize mutual fund transactions. Built with a **Python (FastAPI)** backend, a **PostgreSQL** database, and a responsive **Vanilla HTML/CSS/JS** frontend featuring interactive visualizations, custom filters, and data export tools.
 
