@@ -1,4 +1,4 @@
-// WealthFeed Global Filtering & Interactions Controller
+// Wealthified Global Filtering & Interactions Controller
 
 // Reactive state representing currently active dashboard filters
 export const currentFilters = {

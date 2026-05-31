@@ -1,4 +1,4 @@
-# WealthFeed - Mutual Fund Transaction Analytics Dashboard
+# Wealthified - Mutual Fund Transaction Analytics Dashboard
 
 A beginner-friendly, high-performance, single-page full-stack dashboard designed to aggregate and summarize mutual fund transactions. Built with a **Python (FastAPI)** backend, a **PostgreSQL** database, and a **Vanilla HTML/CSS/JS** frontend featuring a modern glassmorphic theme and interactive visualizations.
 
@@ -19,7 +19,7 @@ A beginner-friendly, high-performance, single-page full-stack dashboard designed
 ## Directory Structure
 
 ```text
-Wealthfeed/
+Wealthified/
 ├── backend/
 │   ├── app/
 │   │   ├── __init__.py

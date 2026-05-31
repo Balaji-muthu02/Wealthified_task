@@ -1,5 +1,5 @@
 """
-WealthFeed - Supabase Seed Script
+Wealthified - Supabase Seed Script
 Creates the transactions table and inserts sample mutual fund data.
 Run: python seed_supabase.py
 """
